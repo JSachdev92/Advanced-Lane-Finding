@@ -51,9 +51,9 @@ The goals / steps of this project are the following:
 [video1]: ./output_images/project_video.mp4 "Video Processing"
 
 
-### Step 1: Compute Camera Coefficients to undistort images
+### Steps 1 & 2: Compute Camera Coefficients to undistort images
 
-For the first part of the project involved learning the camera coefficients to properly adjust for the effects for the lens on the camera and undistort any images that were taken by it. To do so, we used a series of 9x6 chessboard images taken by the camera. I then used the findChessboardCorners() function to find and define the chessboard corners in the image. Once all the chessboard corners and image points were found across all images, the function calibrateCamera() was used to learn the matrix and distortion coefficients for the camera. We can then use the coefficients and matrix to undistort images taken by the camera using the undistort() function.The result can be seen on a chessboard image below:
+For the first part of the project involved learning the camera coefficients to properly adjust for the effects for the lens on the camera and undistort any images that were taken by it. To do so, we used a series of 9x6 chessboard images taken by the camera. I then used the `findChessboardCorners()` function to find and define the chessboard corners in the image. Once all the chessboard corners and image points were found across all images, the function `calibrateCamera()` was used to learn the matrix and distortion coefficients for the camera. We can then use the coefficients and matrix to undistort images taken by the camera using the `undistort()` function.The result can be seen on a chessboard image below:
 
 Distorted Chessboard Pattern |  Undistorted Chessboard Pattern
 :-------------------------:|:-------------------------:
@@ -68,7 +68,19 @@ Distorted Image |  Undistorted Image
 
 One can notice the effects of undistoring the image if one focuses on the 3rd lane line to the right of the vehicle. It appears much less distorted after the correction.
 
+### Step 3: Use color transforms, gradients, etc., to create a thresholded binary image.
 
+In order to create a thresholded binary image, i utilized all the gradient and color transform methods available. I created functions for sobel absolute magnitude and direction thresholding based binary images as well as sobel threshold in the x and directions. In addition, i generated functions for h, l and s colourspace transforms. I tuned the thresholds for each method by analyzing them one by one and then played with the combinations to obtain the best results. As mentioned in the lectures, i also came to the conclusion that the L space was too noisy to use. After tuning the rest of the thresholds and playing with which methods to combine in which order, i obtained the following results:
+
+Straight Line Binary Image - Combined |  Curved Line Binary Image - Combined
+:-------------------------:|:-------------------------:
+![alt text][image5] | ![alt text][image6]
+
+I then fine tuned the thresholds and tweeked the order slightly to obtain a result i was satisfied with:
+
+Straight Line Binary Image - Combined |  Curved Line Binary Image - Combined
+:-------------------------:|:-------------------------:
+![alt text][image7] | ![alt text][image8]
 
 #### 2. Describe how (and identify where in your code) you used color transforms, gradients or other methods to create a thresholded binary image.  Provide an example of a binary image result.
 
