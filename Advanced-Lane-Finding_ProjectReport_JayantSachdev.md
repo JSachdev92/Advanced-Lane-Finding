@@ -1,6 +1,6 @@
-## Writeup Template
+## Advanced Lane Finding
 
-### You can use this file as a template for your writeup if you want to submit it as a markdown file, but feel free to use some other method and submit a pdf if you prefer.
+### Jayant Sachdev
 
 ---
 
@@ -19,13 +19,35 @@ The goals / steps of this project are the following:
 
 [//]: # (Image References)
 
-[image1]: ./examples/undistort_output.png "Undistorted"
-[image2]: ./test_images/test1.jpg "Road Transformed"
-[image3]: ./examples/binary_combo_example.jpg "Binary Example"
-[image4]: ./examples/warped_straight_lines.jpg "Warp Example"
-[image5]: ./examples/color_fit_lines.jpg "Fit Visual"
-[image6]: ./examples/example_output.jpg "Output"
-[video1]: ./project_video.mp4 "Video"
+[image1]: ./output_images/Camera_Calibration/distorted/calibration1.jpg "Distorted CheckerBoard Pattern"
+[image2]: ./output_images/Camera_Calibration/undistorted/calibration1_undist.jpg "Undistorted CheckerBoard Pattern"
+[image3]: ./output_images/Camera_Calibration/distorted/straight_lines1.jpg "Distorted Lane Image"
+[image4]: ./output_images/Camera_Calibration/distorted/straight_lines1.jpg "Undistorted Lane Image"
+[image5]: ./output_images/binary_combined1.png "Initial Combined Binary Image - Straight"
+[image6]: ./output_images/binary_combined1_curved.png "Initial Combined Binary Image - Curve"
+[image7]: ./output_images/binary_final.png "Final Combined Binary Image - Straight"
+[image8]: ./output_images/binary_final_curved.png "Final Combined Binary Image - Curve"
+[image9]: ./output_images/Binary_SL1.png "Binary Straight 1"
+[image10]: ./output_images/Binary_SL2.png "Binary Straight 1"
+[image11]: ./output_images/Binary_T1.png "Binary Test 1"
+[image12]: ./output_images/Binary_T1.png "Binary Test 2"
+[image13]: ./output_images/Binary_T1.png "Binary Test 3"
+[image14]: ./output_images/Binary_T1.png "Binary Test 4"
+[image15]: ./output_images/Binary_T1.png "Binary Test 5"
+[image16]: ./output_images/Binary_T1.png "Binary Test 6"
+[image17]: ./output_images/Transformed_SL1.png "Transformed Straight 1"
+[image18]: ./output_images/Transformed_SL2.png "Transformed Straight 2"
+[image19]: ./output_images/Transformed_T1.png "Transformed Test 1"
+[image20]: ./output_images/Transformed_T1.png "Transformed Test 2"
+[image21]: ./output_images/Transformed_T1.png "Transformed Test 3"
+[image22]: ./output_images/Transformed_T1.png "Transformed Test 4"
+[image23]: ./output_images/Transformed_T1.png "Transformed Test 5"
+[image24]: ./output_images/Transformed_T1.png "Transformed Test 6"
+[image25]: ./output_images/Lane_Lines_Detection_Polyfit.png "Lane Line Detection and Polyfit"
+[image26]: ./output_images/Lane_Area_Filled.png "Fit the lane detection back onto original image"
+[image27]: ./output_images/Lane_Area_Filled_curve.png "Fit the lane detection back onto original image - Curve"
+[image28]: ./output_images/Lane_Curv_Position_Fill_Curve.png "Final Processing for curvature and lateral position in lane"
+[video1]: ./output_images/project_video.mp4 "Video Processing"
 
 ## [Rubric](https://review.udacity.com/#!/rubrics/571/view) Points
 
