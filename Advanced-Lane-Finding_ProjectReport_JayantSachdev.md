@@ -48,6 +48,7 @@ The goals / steps of this project are the following:
 [image26]: ./output_images/Lane_Area_Filled.png "Fit the lane detection back onto original image"
 [image27]: ./output_images/Lane_Area_Filled_curve.png "Fit the lane detection back onto original image - Curve"
 [image28]: ./output_images/Lane_Curv_Position_Fill_Curve.png "Final Processing for curvature and lateral position in lane"
+[image29]: ./output_images/SourcePoints_Transform.png "Source points"
 [video1]: ./output_images/project_video.mp4 "Video Processing"
 
 
@@ -70,53 +71,47 @@ One can notice the effects of undistoring the image if one focuses on the 3rd la
 
 ### Step 3: Use color transforms, gradients, etc., to create a thresholded binary image.
 
-In order to create a thresholded binary image, i utilized all the gradient and color transform methods available. I created functions for sobel absolute magnitude and direction thresholding based binary images as well as sobel threshold in the x and directions. In addition, i generated functions for h, l and s colourspace transforms. I tuned the thresholds for each method by analyzing them one by one and then played with the combinations to obtain the best results. As mentioned in the lectures, i also came to the conclusion that the L space was too noisy to use. After tuning the rest of the thresholds and playing with which methods to combine in which order, i obtained the following results:
+In order to create a thresholded binary image, i utilized all the gradient and color transform methods available. I created functions for sobel absolute magnitude and direction thresholding based binary images as well as sobel threshold in the x and directions. In addition, i generated functions for h, l and s colourspace transforms. I tuned the thresholds for each method by analyzing them one by one and then played with the combinations to obtain the best results. I created a function `binaryimg()` to return a binary image based on inputted thresholds. This can be seen in the 3rd code cell in my jupyter notebook `LaneProc.ipynb` As mentioned in the lectures, i also came to the conclusion that the L space was too noisy to use. After tuning the rest of the thresholds and playing with which methods to combine in which order, i obtained the following results:
 
 Straight Line Binary Image - Combined |  Curved Line Binary Image - Combined
 :-------------------------:|:-------------------------:
 ![alt text][image5] | ![alt text][image6]
 
-I then fine tuned the thresholds and tweeked the order slightly to obtain a result i was satisfied with:
+I then fine tuned the thresholds and removed the H color space because i realized it was not helping and tweeked the order slightly to obtain a result i was satisfied with:
 
 Straight Line Binary Image - Combined |  Curved Line Binary Image - Combined
 :-------------------------:|:-------------------------:
 ![alt text][image7] | ![alt text][image8]
 
-#### 2. Describe how (and identify where in your code) you used color transforms, gradients or other methods to create a thresholded binary image.  Provide an example of a binary image result.
+### Step 4: Applying a perspective transform to rectify a binary image
 
-I used a combination of color and gradient thresholds to generate a binary image (thresholding steps at lines # through # in `another_file.py`).  Here's an example of my output for this step.  (note: this is not actually from one of the test images)
-
-
-
-#### 3. Describe how (and identify where in your code) you performed a perspective transform and provide an example of a transformed image.
-
-The code for my perspective transform includes a function called `warper()`, which appears in lines 1 through 8 in the file `example.py` (output_images/examples/example.py) (or, for example, in the 3rd code cell of the IPython notebook).  The `warper()` function takes as inputs an image (`img`), as well as source (`src`) and destination (`dst`) points.  I chose the hardcode the source and destination points in the following manner:
+The 4th step would be to take the binary image and transform the image so you get a birds eye view of the lane lines. To do so, I first selected the trapezoidal area which i knew represented the straight lines and should appear in a rectangle from a birds eye view. I plotted the image and selected the corners as such:
+```python
+lt = (575, 460) #Left Top
+lb = (255,680)  #Left Bottom
+rb = (1060, 680) #Right Bottom
+rt = (710, 460) #Right Top
+```
+I then knew that i wanted these points to be the focal point of the rectangle in the transformed image. As such, for the destination points, i added margins to the x-axis of the image and made the y-axis cordinates the top and bottom of the transformed image:
 
 ```python
-src = np.float32(
-    [[(img_size[0] / 2) - 55, img_size[1] / 2 + 100],
-    [((img_size[0] / 6) - 10), img_size[1]],
-    [(img_size[0] * 5 / 6) + 60, img_size[1]],
-    [(img_size[0] / 2 + 55), img_size[1] / 2 + 100]])
-dst = np.float32(
-    [[(img_size[0] / 4), 0],
-    [(img_size[0] / 4), img_size[1]],
-    [(img_size[0] * 3 / 4), img_size[1]],
-    [(img_size[0] * 3 / 4), 0]])
+tlb = (200,image.shape[0])#Left Bottom
+tlt = (200, 0)#Left Top
+trb = ((image.shape[1]-250), image.shape[0])#Right Bottom
+trt = ((image.shape[1]-250), 0)#Right Top
 ```
+I then used the source and destination points along with the `getPerspectiveTransform()` function to calculate the M and Minv matrices. I also created a function called `transfrm()` to take in an image with the source and destination points and return the transformed image using the `warpPerspective()` function. The results of the unwarped binary vs. the transformed binary images are below:
 
-This resulted in the following source and destination points:
-
-| Source        | Destination   | 
-|:-------------:|:-------------:| 
-| 585, 460      | 320, 0        | 
-| 203, 720      | 320, 720      |
-| 1127, 720     | 960, 720      |
-| 695, 460      | 960, 0        |
-
-I verified that my perspective transform was working as expected by drawing the `src` and `dst` points onto a test image and its warped counterpart to verify that the lines appear parallel in the warped image.
-
-![alt text][image4]
+Binary Image - Unwarped |  Binary Image - Warped
+:-------------------------:|:-------------------------:
+![alt text][image9] | ![alt text][image17]
+![alt text][image10] | ![alt text][image18]
+![alt text][image11] | ![alt text][image19]
+![alt text][image12] | ![alt text][image20]
+![alt text][image13] | ![alt text][image21]
+![alt text][image14] | ![alt text][image22]
+![alt text][image15] | ![alt text][image23]
+![alt text][image16] | ![alt text][image24]
 
 #### 4. Describe how (and identify where in your code) you identified lane-line pixels and fit their positions with a polynomial?
 
