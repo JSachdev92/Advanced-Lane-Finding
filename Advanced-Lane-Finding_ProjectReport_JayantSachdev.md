@@ -115,14 +115,20 @@ Binary Image - Unwarped |  Binary Image - Warped
 
 #### Step 5: Detect the lane pixels and fit a polynomial to the lane boundary
 
-The next part of the project involved finding the lane pixels. To do so, i used a histogram approach to determine the highest concentrations of activated pixels as we move along the x - axis. I took the 2 highest peaks and selected them as my starting point. I then broke down the y axis into 9 sliding windows and recentered the window if we found a minimum number of pixels activated within a margin of the previous window. This technique is detailed in the course material. I defined a function `find_lane_pixels()` to conduct this calculation. I also wrote a function called `appendLine()` which takes left and right lane pixels from the previous frame and searches around these pixels for activated lane markings. Outputs from either of these functions are inputted into the `fit_polynomial()` function, where i fit a 2nd order polynomial to the activated left and right lane line pixels identified. 
+The next part of the project involved finding the lane pixels. To do so, i used a histogram approach to determine the highest concentrations of activated pixels as we move along the x - axis. I took the 2 highest peaks and selected them as my starting point. I then broke down the y axis into 9 sliding windows and recentered the window if we found a minimum number of pixels activated within a margin of the previous window. This technique is detailed in the course material. I defined a function `find_lane_pixels()` to conduct this calculation. I also wrote a function called `appendLine()` which takes left and right lane pixels from the previous frame and searches around these pixels for activated lane markings. Outputs from either of these functions are inputted into the `fit_polynomial()` function, where i fit a 2nd order polynomial to the activated left and right lane line pixels identified.
 
 The outcome of using the sliding window method to detect lane lines is shown below:
 ![alt text][image25]
 
-#### 5. Describe how (and identify where in your code) you calculated the radius of curvature of the lane and the position of the vehicle with respect to center.
 
-I did this in lines # through # in my code in `my_other_file.py`
+#### Step 6: Determining the curvature of the lane and vehicle position with respect to center.
+
+In addition to fitting the polynomial to the activated lane pixels in the function `fit_polynomial()`, i also converted the lane pixels to physical distances from the origin using the provided values for meters per pixel in each axis. I then fit a polynomial to each of these real world lane polynomials to utilize in the calculations for curvature and vehicle position with respect to the center of the lane.
+
+In order to calculate the curvature, i utilized the real world lane polynomial as function of distance in x and y axis, along with the formula, R<sub>curve</sub> = (1+(2Ay+B)<sup>2</sup>)<sup>3/2</sup>/(|2A|) to calculate the curvature of the left and right lane markings.
+
+In order to calculate the vehicle position with respect to center, i first defined the vehicle center as the center of the x - axis. Then i realized that at the vehicle longitudinal position, the y-axis was at its maximum point and the polynomial fit to the lane markings were defined as: x = f(y). As such, i used the real world 2nd order polynomial coeffients with the maximum Y values to calculate the lateral position of the left and right lane at Y=maxY. I then determined the center of the lane to be: (Dist<sub>LeftLane</sub> + Dist<sub>RightLane</sub>)/2 +  Dist<sub>LeftLane</sub>. I then found the position error to be: Position Error = Center of the Lane - Vehicle Center
+
 
 #### 6. Provide an example image of your result plotted back down onto the road such that the lane area is identified clearly.
 
