@@ -17,6 +17,7 @@ The goals / steps of this project are the following:
 6. Determine the curvature of the lane and vehicle position with respect to center.
 7. Define the area between the lane boundaries in the original image.
 8. Display image with calculated lane boundaries and numerical estimation of lane curvature and vehicle position imposed over original  image.
+9. Create a pipeline to run on a video feed.
 
 [//]: # (Image References)
 
@@ -113,7 +114,7 @@ Binary Image - Unwarped |  Binary Image - Warped
 ![alt text][image15] | ![alt text][image23]
 ![alt text][image16] | ![alt text][image24]
 
-#### Step 5: Detect the lane pixels and fit a polynomial to the lane boundary
+### Step 5: Detect the lane pixels and fit a polynomial to the lane boundary
 
 The next part of the project involved finding the lane pixels. To do so, i used a histogram approach to determine the highest concentrations of activated pixels as we move along the x - axis. I took the 2 highest peaks and selected them as my starting point. I then broke down the y axis into 9 sliding windows and recentered the window if we found a minimum number of pixels activated within a margin of the previous window. This technique is detailed in the course material. I defined a function `find_lane_pixels()` to conduct this calculation. I also wrote a function called `appendLine()` which takes left and right lane pixels from the previous frame and searches around these pixels for activated lane markings. Outputs from either of these functions are inputted into the `fit_polynomial()` function, where i fit a 2nd order polynomial to the activated left and right lane line pixels identified.
 
@@ -121,7 +122,7 @@ The outcome of using the sliding window method to detect lane lines is shown bel
 ![alt text][image25]
 
 
-#### Step 6: Determining the curvature of the lane and vehicle position with respect to center.
+### Step 6: Determining the curvature of the lane and vehicle position with respect to center.
 
 In addition to fitting the polynomial to the activated lane pixels in the function `fit_polynomial()`, i also converted the lane pixels to physical distances from the origin using the provided values for meters per pixel in each axis. I then fit a polynomial to each of these real world lane polynomials to utilize in the calculations for curvature and vehicle position with respect to the center of the lane.
 
@@ -140,7 +141,7 @@ I then defined the position error as:
 Position Error = Center of the Lane - Vehicle Center
 
 
-#### Step 7: Define the area between the lane boundaries in the original image.
+### Step 7: Define the area between the lane boundaries in the original image.
 
 At this stage, we have sucessfully found our lane markings, defined it with a 2nd order polynomial and determined the lane curvature and vehicle position in the lane. In order to do so, we created a binary image, warped the image and did the calculations on the warped binary image. 
 
@@ -154,18 +155,18 @@ Here is some examples of my results on test images:
 
 ---
 
-#### Step 8: Display image with calculated lane boundaries and numerical estimation of lane curvature and vehicle position imposed over original  image.
+### Step 8: Display image with calculated lane boundaries and numerical estimation of lane curvature and vehicle position imposed over original  image.
 
 I then utilized the `putText()` function to write ontop of the image from Step 7 to generate the final image with curvature, position data superimposed with the lane boundary highlighted on the original image:
 
 ![alt text][image28]
 
-### Pipeline (video)
+### Step 9: Creat a pipeline to run on a video feed.
 
+The first step to creating the pipeline was to define a class `Line()` with which to store some properties of the left and right lane line. 
 
-#### 1. Provide a link to your final video output.  Your pipeline should perform reasonably well on the entire project video (wobbly lines are ok but no catastrophic failures that would cause the car to drive off the road!).
-
-Here's a [link to my video result](./project_video.mp4)
+I then created a pipeline where i replicated steps 1-8 above. In addition, I added some sanity checks to ensure the lane lines do not do anything funny. To begin with, I ensure that the absolute difference between the left and right curvature is bounded. I have different error tolerances for when the curvature is above 1000m vs. when it is below as i found the errors between the left and right side can be quite drastic in straight roads. I also calculated the lane width and utilized a lanewidth check to ensure that the we discarded any frames where the lane width did not make sense. After trying these two sanity checks, i realized that there were still some funny things happening in some parts of the video, as such i implemented sanity checks on the 1st and 2nd order lane polynomial coefficients to ensure that the right and left lane polynomials were fairly similar. This greatly improved my pipeline. In order to smooth the video stream a little bit, i implemented a simple moving average to use when the sanity checks failed. I noticed that this added some delay and caused issues with the lane lines jumping, as such i did not utilize this. My project video can be seen here: [Project Video Output](./output_images/project_video.mp4) 
+![alt text][video1]
 
 ---
 
@@ -173,4 +174,19 @@ Here's a [link to my video result](./project_video.mp4)
 
 #### 1. Briefly discuss any problems / issues you faced in your implementation of this project.  Where will your pipeline likely fail?  What could you do to make it more robust?
 
-Here I'll talk about the approach I took, what techniques I used, what worked and why, where the pipeline might fail and how I might improve it if I were going to pursue this project further.  
+So I ultimately found this project quite challenging. Even if the lane lines looked good in the original image, it sometimes struggled in the video feed. I realized that i likely filtered out too much information with my binary thresholds in order to reduce the noise and this has hurt my ability to detect lane lines in some challenging scenario's. I also had difficulties in implementing the `appendLine()` function with the video feed as it kept causing the script to crash. As i could not root cause this issue in the available time, i decided to stick with the histogram approach for every frame. 
+
+Considering my implementation, i believe my pipeline will fail when there are more complex scenario's such as shadows and bad lighting, without enough good frames to reset the lane polynomial in between. Furthermore, i did not implement techniques to detect lane lines when the curvature is very steep, so i know that my pipeline will struggle with the challenge video's. 
+
+If i am to improve the pipeline, i will do the following:
+
+1. I will adjust the binary image thresholds to let in more information so i can get an lane polynomial estimation in harsh conditions, even if it is a poor estimate.
+2. I will implement a more robust filter for the lane polynomials, as the moving average filter only introduced a delay without any notible improvement. Some ideas i have are: 
+      I.  Implement a Low-Pass Filter
+      II. Implement a Kalman Filter
+3. I will solve the algorithm to search around the previously detected lane lines
+4. I will implement an algorithm for very high curvatures
+5. I will improve the sanity checks conducted on the algorithm by looking for additional data that would suggest the lane information is not trusted
+
+
+All in all i quite enjoyed this project and i am fairly pleased with the results. I will definitely revisit this project in the future when i have time to deep dive into my implementation and perfect it. 
