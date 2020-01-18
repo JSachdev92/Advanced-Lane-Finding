@@ -28,7 +28,7 @@ The goals / steps of this project are the following:
 [image6]: ./output_images/binary_combined1_curved.png "Initial Combined Binary Image - Curve"
 [image7]: ./output_images/binary_final.png "Final Combined Binary Image - Straight"
 [image8]: ./output_images/binary_final_curved.png "Final Combined Binary Image - Curve"
-[image9]: ./output_images/Binary_SL1m.png "Binary Straight 1"
+[image9]: ./output_images/Binary_SL1.png "Binary Straight 1"
 [image10]: ./output_images/Binary_SL2.png "Binary Straight 1"
 [image11]: ./output_images/Binary_T1.png "Binary Test 1"
 [image12]: ./output_images/Binary_T2.png "Binary Test 2"
