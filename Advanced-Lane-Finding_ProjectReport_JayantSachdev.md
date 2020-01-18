@@ -15,7 +15,7 @@ The goals / steps of this project are the following:
 4. Apply a perspective transform to rectify binary image ("birds-eye view").
 5. Detect lane pixels and fit to find the lane boundary.
 6. Determine the curvature of the lane and vehicle position with respect to center.
-7. Warp the detected lane boundaries back onto the original image.
+7. Define the area between the lane boundaries in the original image.
 8. Display image with calculated lane boundaries and numerical estimation of lane curvature and vehicle position imposed over original  image.
 
 [//]: # (Image References)
@@ -125,20 +125,38 @@ The outcome of using the sliding window method to detect lane lines is shown bel
 
 In addition to fitting the polynomial to the activated lane pixels in the function `fit_polynomial()`, i also converted the lane pixels to physical distances from the origin using the provided values for meters per pixel in each axis. I then fit a polynomial to each of these real world lane polynomials to utilize in the calculations for curvature and vehicle position with respect to the center of the lane.
 
-In order to calculate the curvature, i utilized the real world lane polynomial as function of distance in x and y axis, along with the formula, R<sub>curve</sub> = (1+(2Ay+B)<sup>2</sup>)<sup>3/2</sup>/(|2A|) to calculate the curvature of the left and right lane markings.
+In order to calculate the curvature, i utilized the real world lane polynomial as function of distance in x and y axis, along with the formula:
 
-In order to calculate the vehicle position with respect to center, i first defined the vehicle center as the center of the x - axis. Then i realized that at the vehicle longitudinal position, the y-axis was at its maximum point and the polynomial fit to the lane markings were defined as: x = f(y). As such, i used the real world 2nd order polynomial coeffients with the maximum Y values to calculate the lateral position of the left and right lane at Y=maxY. I then determined the center of the lane to be: (Dist<sub>LeftLane</sub> + Dist<sub>RightLane</sub>)/2 +  Dist<sub>LeftLane</sub>. I then found the position error to be: Position Error = Center of the Lane - Vehicle Center
+R<sub>curve</sub> = (1+(2Ay+B)<sup>2</sup>)<sup>3/2</sup>/(|2A|),
+
+to calculate the curvature of the left and right lane markings. I then averaged the left and right markings to get a better estimate of the desired path curvature at the center of the lane. 
+
+In order to calculate the vehicle position with respect to center, i first defined the vehicle center as the center of the x - axis. Then i realized that at the vehicle longitudinal position, the y-axis was at its maximum point and the polynomial fit to the lane markings were defined as: x = f(y). As such, i used the real world 2nd order polynomial coeffients with the maximum Y values to calculate the lateral position of the left and right lane at Y=maxY. I then determined the center of the lane to be:
+(Dist<sub>LeftLane</sub> + Dist<sub>RightLane</sub>)/2 +  Dist<sub>LeftLane</sub>. 
+
+I then found the position error to be: 
+
+Position Error = Center of the Lane - Vehicle Center
 
 
-#### 6. Provide an example image of your result plotted back down onto the road such that the lane area is identified clearly.
+#### Step 7: Define the area between the lane boundaries in the original image.
 
-I implemented this step in lines # through # in my code in `yet_another_file.py` in the function `map_lane()`.  Here is an example of my result on a test image:
+At this stage, we have sucessfully found our lane markings, defined it with a 2nd order polynomial and determined the lane curvature and vehicle position in the lane. In order to do so, we created a binary image, warped the image and did the calculations on the warped binary image. 
 
-![alt text][image6]
+In order mark the Lane we are travelling in, I first took the lane polynomials and defined left and right points. I then used the `fillPoly()` function to color the area between the two polynomials. I finally used the source and destination points defined in Step 4 and flipped them to convert the filled area from the transformed image back to the regular image. This transformed area can then be merged with the orginal image highlight the area between the lines. 
+
+Here is an example of my result on a test image:
+
+![alt text][image26]
 
 ---
 
+#### Step 8: Display image with calculated lane boundaries and numerical estimation of lane curvature and vehicle position imposed over original  image.
+
+I then utilized the `putText()` function to write ontop of the image from Step 7 to generate the final image with curvature, position data superimposed with the lane boundary highlighted on the original image. 
+
 ### Pipeline (video)
+
 
 #### 1. Provide a link to your final video output.  Your pipeline should perform reasonably well on the entire project video (wobbly lines are ok but no catastrophic failures that would cause the car to drive off the road!).
 
