@@ -131,10 +131,11 @@ R<sub>curve</sub> = (1+(2Ay+B)<sup>2</sup>)<sup>3/2</sup>/(|2A|),
 
 to calculate the curvature of the left and right lane markings. I then averaged the left and right markings to get a better estimate of the desired path curvature at the center of the lane. 
 
-In order to calculate the vehicle position with respect to center, i first defined the vehicle center as the center of the x - axis. Then i realized that at the vehicle longitudinal position, the y-axis was at its maximum point and the polynomial fit to the lane markings were defined as: x = f(y). As such, i used the real world 2nd order polynomial coeffients with the maximum Y values to calculate the lateral position of the left and right lane at Y=maxY. I then determined the center of the lane to be:
+In order to calculate the vehicle position with respect to center, i first defined the vehicle center as the center of the x - axis. Then i realized that at the vehicle longitudinal position, the y-axis was at its maximum point and the polynomial fit to the lane markings were defined as: x = f(y). As such, i used the real world 2nd order polynomial coeffients with the maximum Y values to calculate the lateral position of the left and right lane at Y=maxY. I determined the center of the lane to be:
+
 (Dist<sub>LeftLane</sub> + Dist<sub>RightLane</sub>)/2 +  Dist<sub>LeftLane</sub>. 
 
-I then found the position error to be: 
+I then defined the position error as: 
 
 Position Error = Center of the Lane - Vehicle Center
 
@@ -145,15 +146,19 @@ At this stage, we have sucessfully found our lane markings, defined it with a 2n
 
 In order mark the Lane we are travelling in, I first took the lane polynomials and defined left and right points. I then used the `fillPoly()` function to color the area between the two polynomials. I finally used the source and destination points defined in Step 4 and flipped them to convert the filled area from the transformed image back to the regular image. This transformed area can then be merged with the orginal image highlight the area between the lines. 
 
-Here is an example of my result on a test image:
+Here is some examples of my results on test images:
 
-![alt text][image26]
+ Straight Line Image  |   Curved Line Image 
+:-------------------------:|:-------------------------:
+![alt text][image26] | ![alt text][image27]
 
 ---
 
 #### Step 8: Display image with calculated lane boundaries and numerical estimation of lane curvature and vehicle position imposed over original  image.
 
-I then utilized the `putText()` function to write ontop of the image from Step 7 to generate the final image with curvature, position data superimposed with the lane boundary highlighted on the original image. 
+I then utilized the `putText()` function to write ontop of the image from Step 7 to generate the final image with curvature, position data superimposed with the lane boundary highlighted on the original image:
+
+![alt text][image28]
 
 ### Pipeline (video)
 
