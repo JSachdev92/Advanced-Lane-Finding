@@ -50,7 +50,7 @@ The goals / steps of this project are the following:
 [image27]: ./output_images/Lane_Area_Filled_curve.png "Fit the lane detection back onto original image - Curve"
 [image28]: ./output_images/Lane_Curv_Position_Fill_Curve.png "Final Processing for curvature and lateral position in lane"
 [image29]: ./output_images/SourcePoints_Transform.png "Source points"
-[video1]: ./output_images/project_video.mp4 "Video Processing"
+[video1]: ./output_images/project_video_output.mp4 "Video Processing"
 
 
 ### Steps 1 & 2: Compute Camera Coefficients to undistort images
