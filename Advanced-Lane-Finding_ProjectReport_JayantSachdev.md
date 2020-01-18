@@ -73,11 +73,11 @@ One can notice the effects of undistoring the image if one focuses on the 3rd la
 
 In order to create a thresholded binary image, i utilized all the gradient and color transform methods available. I created functions for sobel absolute magnitude and direction thresholding based binary images as well as sobel threshold in the x and directions. In addition, i generated functions for h, l and s colourspace transforms. I tuned the thresholds for each method by analyzing them one by one and then played with the combinations to obtain the best results. I created a function `binaryimg()` to return a binary image based on inputted thresholds. This can be seen in the 3rd code cell in my jupyter notebook `LaneProc.ipynb` As mentioned in the lectures, i also came to the conclusion that the L space was too noisy to use. After tuning the rest of the thresholds and playing with which methods to combine in which order, i obtained the following results:
 
-Straight Line Binary Image - Combined |  Curved Line Binary Image - Combined
+Initial Straight Line Binary Image - Combined |  Initial Curved Line Binary Image - Combined
 :-------------------------:|:-------------------------:
 ![alt text][image5] | ![alt text][image6]
 
-I then fine tuned the thresholds and removed the H color space because i realized it was not helping and tweeked the order slightly to obtain a result i was satisfied with:
+I then fine tuned the thresholds and removed the H color space because i realized it was not helping and tweeked the order slightly to obtain a result i was satisfied with. I spent a lot of efforts here especially with the image test5. As i noticed the shadow from the tree caused a lot of noise, which then affected the lane polynomial that was fit to the curve. The resulting binary images can be seen below:
 
 Straight Line Binary Image - Combined |  Curved Line Binary Image - Combined
 :-------------------------:|:-------------------------:
@@ -113,11 +113,12 @@ Binary Image - Unwarped |  Binary Image - Warped
 ![alt text][image15] | ![alt text][image23]
 ![alt text][image16] | ![alt text][image24]
 
-#### 4. Describe how (and identify where in your code) you identified lane-line pixels and fit their positions with a polynomial?
+#### Step 5: Detect the lane pixels and fit a polynomial to the lane boundary
 
-Then I did some other stuff and fit my lane lines with a 2nd order polynomial kinda like this:
+The next part of the project involved finding the lane pixels. To do so, i used a histogram approach to determine the highest concentrations of activated pixels as we move along the x - axis. I took the 2 highest peaks and selected them as my starting point. I then broke down the y axis into 9 sliding windows and recentered the window if we found a minimum number of pixels activated within a margin of the previous window. This technique is detailed in the course material. I defined a function `find_lane_pixels()` to conduct this calculation. I also wrote a function called `appendLine()` which takes left and right lane pixels from the previous frame and searches around these pixels for activated lane markings. Outputs from either of these functions are inputted into the `fit_polynomial()` function, where i fit a 2nd order polynomial to the activated left and right lane line pixels identified. 
 
-![alt text][image5]
+The outcome of using the sliding window method to detect lane lines is shown below:
+![alt text][image25]
 
 #### 5. Describe how (and identify where in your code) you calculated the radius of curvature of the lane and the position of the vehicle with respect to center.
 
